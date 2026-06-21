@@ -1,0 +1,74 @@
+---
+import { services } from '../data/site';
+const path = Astro.url.pathname;
+---
+<header id="nav" class="fixed top-0 inset-x-0 z-50">
+  <div class="container-x flex items-center justify-between h-[72px]">
+    <a href="/" class="flex items-center gap-2.5 group" aria-label="GTS Hi-Tech home">
+      <img src="/img/gts-mark.png" alt="" class="w-9 h-9" />
+      <span class="display text-[1.35rem] tracking-tight leading-none">GTS<span class="accent-text">.</span></span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-1 text-[0.9rem] font-medium">
+      <div class="relative group">
+        <button class="px-3.5 py-2 rounded-full hover:bg-ink-900/[0.05] transition flex items-center gap-1.5">
+          Services
+          <svg class="w-3.5 h-3.5 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <!-- dropdown -->
+        <div class="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+          <div class="w-[300px] bg-paper rounded-2xl shadow-lift border border-ink-900/[0.06] p-2">
+            {services.map(s => (
+              <a href={`/${s.slug}`} class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-ink-900/[0.04] transition group/item">
+                <span class="mono-label text-ink-400 w-6">{s.num}</span>
+                <span class="flex-1 font-medium" style={`--row:${s.accent}`}>{s.name}</span>
+                <span class="w-2 h-2 rounded-full transition-transform group-hover/item:scale-150" style={`background:${s.accent}`}></span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+      <a href="/#why" class="px-3.5 py-2 rounded-full hover:bg-ink-900/[0.05] transition">Why GTS</a>
+      <a href="/#brands" class="px-3.5 py-2 rounded-full hover:bg-ink-900/[0.05] transition">Brands</a>
+      <a href="/#offices" class="px-3.5 py-2 rounded-full hover:bg-ink-900/[0.05] transition">Offices</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="/#contact" data-magnetic class="btn btn-ink text-[0.85rem] py-2.5 px-5 hidden sm:inline-flex">
+        Get in touch
+        <svg class="arr w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button id="burger" class="lg:hidden w-10 h-10 grid place-items-center rounded-full border border-ink-900/15" aria-label="Menu">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- mobile menu -->
+  <div id="mobile" class="lg:hidden hidden bg-paper border-t border-ink-900/[0.07]">
+    <nav class="container-x py-4 grid gap-1">
+      {services.map(s => (
+        <a href={`/${s.slug}`} class="flex items-center gap-3 py-2.5">
+          <span class="mono-label text-ink-400 w-6">{s.num}</span>
+          <span class="font-medium">{s.name}</span>
+        </a>
+      ))}
+      <a href="/#contact" class="btn btn-ink justify-center mt-3">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  function initNav() {
+    const nav = document.getElementById('nav');
+    const onScroll = () => { if (!nav) return; nav.classList.toggle('scrolled', window.scrollY > 20); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    const burger = document.getElementById('burger');
+    const mobile = document.getElementById('mobile');
+    burger?.addEventListener('click', () => mobile?.classList.toggle('hidden'));
+    mobile?.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobile.classList.add('hidden')));
+  }
+  initNav();
+  document.addEventListener('astro:after-swap', initNav);
+</script>

@@ -1,0 +1,20 @@
+{
+  "name": "gts-hitech",
+  "type": "module",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --port 5181",
+    "start": "astro dev --port 5181",
+    "build": "astro build",
+    "preview": "astro preview --port 5181",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.16.19",
+    "@astrojs/tailwind": "^5.1.4",
+    "tailwindcss": "^3.4.17",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.20"
+  }
+}

@@ -1,0 +1,71 @@
+---
+import { company, services, offices } from '../data/site';
+---
+<footer class="bg-ink-950 text-white">
+  <div class="container-x pt-16 pb-10">
+    <!-- big CTA line -->
+    <div class="border-b border-white/10 pb-12">
+      <a href="/#contact" class="group block">
+        <div class="mono-label text-white/40">Start a conversation</div>
+        <div class="display d-lg mt-3 text-balance group-hover:text-coral-400 transition-colors duration-300">
+          Let’s engineer something<br/>that just keeps running.
+          <svg class="inline-block w-[0.8em] h-[0.8em] align-middle ml-2 transition-transform duration-300 group-hover:translate-x-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-12 gap-10 pt-12">
+      <div class="md:col-span-4">
+        <div class="flex items-center gap-2.5">
+          <img src="/img/gts-mark.png" alt="" class="w-9 h-9 bg-white/10 rounded-lg p-1" />
+          <span class="display text-xl">GTS Hi-Tech</span>
+        </div>
+        <p class="text-sm text-white/55 mt-4 max-w-xs leading-relaxed">{company.tagline}.</p>
+        <div class="mono-label text-white/35 mt-5">{company.former}</div>
+      </div>
+
+      <div class="md:col-span-3">
+        <div class="mono-label text-white/40">Services</div>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          {services.map(s => <li><a href={`/${s.slug}`} class="text-white/70 hover:text-white transition">{s.name}</a></li>)}
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="mono-label text-white/40">Company</div>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li><a href="/#why" class="text-white/70 hover:text-white transition">Why GTS</a></li>
+          <li><a href="/#brands" class="text-white/70 hover:text-white transition">Brands</a></li>
+          <li><a href="/#offices" class="text-white/70 hover:text-white transition">Offices</a></li>
+          <li><a href="/#contact" class="text-white/70 hover:text-white transition">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="md:col-span-3">
+        <div class="mono-label text-white/40">Reach us</div>
+        <a href={`mailto:${company.email}`} class="block mt-4 text-sm text-white hover:text-coral-400 transition break-all">{company.email}</a>
+        <div class="mt-2 space-y-1 text-sm font-mono text-white/60">
+          {company.phones.map(p => <div>{p}</div>)}
+        </div>
+        <div class="mt-5 flex gap-2">
+          {offices.map(o => (
+            <div class="flex-1 rounded-lg bg-white/[0.06] border border-white/10 p-2.5 text-center">
+              <div class="text-base">{o.flag}</div>
+              <div class="text-[10px] text-white/60 mt-1">{o.city}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-white/40">
+      <span>© {new Date().getFullYear()} {company.name}. All rights reserved.</span>
+      <a href="https://beko-cloud.work" target="_blank" rel="noopener" class="hover:text-white transition">Designed by B-Smart Solutions ↗</a>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a href={`https://wa.me/${company.phonePrimary}?text=${encodeURIComponent(company.whatsappMsg)}`} target="_blank" rel="noopener" class="fixed bottom-6 right-6 z-40 grid place-items-center w-14 h-14 rounded-full bg-emerald-500 text-white shadow-lg hover:scale-110 transition" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.8-2-.9s-.5-.1-.7.1-.8.9-.9 1.1-.3.2-.6.1-1.2-.4-2.3-1.4c-.8-.7-1.4-1.7-1.6-2s0-.3.1-.4l.4-.4c.1-.2.2-.3.3-.5s0-.4 0-.5-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.7.4S6 8.7 6 10.1c0 1.4 1 2.7 1.2 2.9.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4 0-.1-.3-.2-.6-.4zM12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.4 5.3L2 22l4.8-1.3c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+</a>

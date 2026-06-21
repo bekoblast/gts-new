@@ -1,0 +1,142 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { company } from '../data/site';
+
+interface Props { title?: string; description?: string; accent?: string; accentSoft?: string; }
+const {
+  title = `${company.name} — ICT engineered for the GCC & East Africa`,
+  description = company.about,
+  accent = '#380997',
+  accentSoft = '#f4f1ff'
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#380997" />
+    <link rel="icon" type="image/png" href="/img/gts-mark.png" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <title>{title}</title>
+    <ViewTransitions />
+    <!-- mark JS-enabled before first paint so reveal/draw hidden states only apply with JS -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body style={`--accent:${accent}; --accent-soft:${accentSoft};`}>
+    <div id="progress"></div>
+    <Nav transition:persist />
+    <main style="view-transition-name: main-content">
+      <slot />
+    </main>
+    <Footer />
+
+    <style is:global>@import '../styles/global.css';</style>
+
+    <script>
+      import { gsap } from 'gsap';
+      import Lenis from 'lenis';
+
+      // ── Lenis (init once; survives view transitions) ──
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const hover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      if (!reduce && !(window as any).__lenis) {
+        const lenis = new Lenis({ duration: 1.05, smoothWheel: true, lerp: 0.1 });
+        (window as any).__lenis = lenis;
+        const raf = (t: number) => { lenis.raf(t); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      }
+      // reset scroll position on navigation
+      document.addEventListener('astro:after-swap', () => (window as any).__lenis?.scrollTo(0, { immediate: true }));
+
+      // ── Scroll progress ──
+      function progress() {
+        const bar = document.getElementById('progress');
+        const upd = () => {
+          const h = document.documentElement;
+          const p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
+          if (bar) bar.style.transform = `scaleX(${p})`;
+        };
+        upd(); window.addEventListener('scroll', upd, { passive: true });
+      }
+
+      // ── Reveal + self-draw ──
+      function revealEl(el: HTMLElement) {
+        el.classList.add('in', 'is-drawn');
+        if (el.hasAttribute('data-reveal-stagger')) {
+          Array.from(el.children).forEach((c, i) => { (c as HTMLElement).style.transitionDelay = `${i * 0.07}s`; });
+        }
+      }
+      function observe() {
+        const items = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal],[data-reveal-stagger],.draw'));
+        // measure path lengths for draw glyphs up front
+        items.forEach(el => {
+          if (el.classList.contains('draw')) {
+            el.querySelectorAll('path,line,polyline,circle,rect,ellipse').forEach(p => {
+              try {
+                const len = (p as SVGGeometryElement).getTotalLength?.() || 400;
+                (p as SVGElement).style.setProperty('--len', String(Math.ceil(len)));
+              } catch {}
+            });
+          }
+        });
+        // reveal anything already in/near the viewport immediately
+        const vh = window.innerHeight;
+        const pending = items.filter(el => {
+          const top = el.getBoundingClientRect().top;
+          if (top < vh * 0.92) { revealEl(el); return false; }
+          return true;
+        });
+        // observe the rest for scroll reveal
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) { revealEl(e.target as HTMLElement); io.unobserve(e.target); } });
+        }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+        pending.forEach(el => io.observe(el));
+        // safety net: if the observer is throttled (e.g. background tab), force-reveal after 2.4s
+        setTimeout(() => pending.forEach(revealEl), 2400);
+      }
+
+      // ── Counters ──
+      function counters() {
+        const els = Array.from(document.querySelectorAll<HTMLElement>('[data-count]'));
+        const run = (el: HTMLElement) => {
+          if (el.dataset.done) return; el.dataset.done = '1';
+          const target = parseFloat(el.dataset.count || '0');
+          const dec = parseInt(el.dataset.dec || '0');
+          const o = { v: 0 };
+          gsap.to(o, { v: target, duration: 1.8, ease: 'power3.out', onUpdate: () => { el.textContent = o.v.toFixed(dec); } });
+        };
+        const vh = window.innerHeight;
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => { if (e.isIntersecting) { run(e.target as HTMLElement); io.unobserve(e.target); } });
+        }, { threshold: 0.6 });
+        els.forEach(el => { if (el.getBoundingClientRect().top < vh * 0.9) run(el); else io.observe(el); });
+        // safety net
+        setTimeout(() => els.forEach(run), 2600);
+      }
+
+      // ── Magnetic ──
+      function magnetic() {
+        if (!hover || reduce) return;
+        document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach(el => {
+          el.addEventListener('mousemove', (ev) => {
+            const r = el.getBoundingClientRect();
+            const x = (ev.clientX - (r.left + r.width / 2)) * 0.3;
+            const y = (ev.clientY - (r.top + r.height / 2)) * 0.3;
+            el.style.transform = `translate(${x}px,${y}px)`;
+          });
+          el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+        });
+      }
+
+      function initAll() { progress(); observe(); counters(); magnetic(); }
+      initAll();
+      document.addEventListener('astro:after-swap', initAll);
+    </script>
+  </body>
+</html>

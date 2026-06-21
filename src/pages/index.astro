@@ -1,0 +1,260 @@
+---
+import Base from '../layouts/Base.astro';
+import ServiceGlyph from '../components/ServiceGlyph.astro';
+import HeroNetwork from '../components/HeroNetwork.astro';
+import { company, services, stats, whyUs, brands, offices, values, sectors, engagement } from '../data/site';
+---
+<Base>
+  <!-- ══════════ HERO ══════════ -->
+  <section id="hero" class="relative pt-32 lg:pt-44 pb-16 lg:pb-24 overflow-hidden bg-ink-950 text-white">
+    <!-- hero image background -->
+    <div class="absolute inset-0" aria-hidden="true">
+      <img src="/img/hero.jpg" alt="" class="hero-img w-full h-full object-cover" />
+      <!-- left-weighted scrim for legibility + top/bottom fade -->
+      <div class="absolute inset-0" style="background:linear-gradient(90deg, rgba(10,11,18,.94) 0%, rgba(10,11,18,.78) 36%, rgba(10,11,18,.34) 68%, rgba(10,11,18,.12) 100%)"></div>
+      <div class="absolute inset-0" style="background:linear-gradient(180deg, rgba(10,11,18,.55) 0%, transparent 26%, transparent 72%, rgba(10,11,18,.7) 100%)"></div>
+      <!-- parallax FX layer: breathing glow + drifting light glints -->
+      <div class="hero-fx absolute inset-0 pointer-events-none" data-px>
+        <div class="hero-glow" style="width:30rem;height:30rem;left:6%;top:8%;background:#5320b8"></div>
+        <div class="hero-glow" style="width:22rem;height:22rem;right:14%;bottom:2%;background:#e44a4a;animation-delay:-4s"></div>
+        <span class="glint" style="left:60%;top:26%"></span>
+        <span class="glint" style="left:74%;top:46%;animation-delay:1.2s"></span>
+        <span class="glint" style="left:55%;top:62%;animation-delay:2.4s"></span>
+        <span class="glint" style="left:84%;top:20%;animation-delay:.6s"></span>
+        <span class="glint" style="left:68%;top:72%;animation-delay:3s"></span>
+      </div>
+    </div>
+
+    <!-- continuous network animation (the persona) -->
+    <HeroNetwork />
+
+    <div class="container-x relative z-10">
+      <div class="max-w-3xl">
+        <div class="eyebrow mono-label text-white/60" data-reveal>Networking-first ICT · Since 2010</div>
+        <h1 class="display d-xl mt-6 text-balance text-white" data-reveal>
+          We engineer the <span class="accent-word">network</span> behind the business.
+        </h1>
+        <p class="mt-7 text-lg lg:text-xl text-white/75 max-w-xl leading-relaxed" data-reveal>
+          {company.about}
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3" data-reveal>
+          <a href="#services" class="btn btn-solid" data-magnetic>
+            Explore our services
+            <svg class="arr w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost-light">Talk to an engineer</a>
+        </div>
+      </div>
+
+      <!-- stat strip -->
+      <div class="mt-16 lg:mt-24 grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-10 border-t border-white/15 pt-10" data-reveal-stagger>
+        {stats.map(s => (
+          <div>
+            <div class="display d-md text-white"><span data-count={s.value} data-dec={s.value % 1 ? 2 : 0}>0</span>{s.suffix}</div>
+            <div class="mono-label text-white/55 mt-2">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- scroll cue -->
+    <a href="#services" class="hidden lg:flex absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex-col items-center gap-2 text-white/55 hover:text-white transition" aria-label="Scroll to services">
+      <span class="mono-label text-[10px]">Scroll</span>
+      <svg class="scroll-cue w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+    </a>
+  </section>
+
+  <!-- ══════════ SERVICES INDEX (hover-to-preview) ══════════ -->
+  <section id="services" class="py-20 lg:py-28 bg-ink-950 text-white">
+    <div class="container-x">
+      <div class="flex items-end justify-between flex-wrap gap-6 mb-10 lg:mb-14">
+        <div data-reveal>
+          <div class="eyebrow mono-label text-white/45">What we do</div>
+          <h2 class="display d-lg mt-5 text-balance">Seven disciplines.<br/>One coherent stack.</h2>
+        </div>
+        <p class="text-white/55 max-w-sm text-pretty" data-reveal>
+          We don’t sell parts — we design, deploy and operate complete systems. Hover a discipline to look inside.
+        </p>
+      </div>
+
+      <div class="border-t border-white/12" data-reveal-stagger>
+        {services.map(s => (
+          <a href={`/${s.slug}`} class="svc-row group flex items-center gap-5 lg:gap-8 py-6 lg:py-7 border-b border-white/12" style={`--row-accent:${s.accent}`}>
+            <span class="mono-label text-white/35 w-8 shrink-0">{s.num}</span>
+            <span class="svc-icon relative grid place-items-center w-9 h-9 lg:w-11 lg:h-11 shrink-0" style={`--glow:${s.accent}`}>
+              <span class="svc-icon-halo"></span>
+              <ServiceGlyph name={s.glyph} class="draw w-full h-full relative z-10" />
+            </span>
+            <span class="svc-name display text-[1.7rem] lg:text-[2.6rem] leading-none flex-1 min-w-0">{s.name}</span>
+            <span class="hidden md:block text-sm text-white/45 max-w-[16rem] text-pretty">{s.short}</span>
+            <svg class="w-6 h-6 shrink-0 text-white/40 transition-transform duration-300 group-hover:translate-x-2 group-hover:text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <span class="svc-preview framed"><img src={s.photo} alt="" class="w-full h-full object-cover" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ WHY GTS ══════════ -->
+  <section id="why" class="py-20 lg:py-28">
+    <div class="container-x">
+      <div class="max-w-2xl" data-reveal>
+        <div class="eyebrow mono-label text-ink-500">Why GTS</div>
+        <h2 class="display d-lg mt-5 text-balance">The team you call when downtime isn’t an option.</h2>
+      </div>
+      <div class="mt-12 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-12" data-reveal-stagger>
+        {whyUs.map((w, i) => (
+          <div class="border-t border-ink-900/12 pt-5">
+            <div class="mono-label text-ink-400">0{i+1}</div>
+            <h3 class="display text-2xl mt-3">{w.title}</h3>
+            <p class="text-ink-600 mt-2 leading-relaxed text-pretty">{w.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <!-- values + sectors row -->
+      <div class="mt-16 grid lg:grid-cols-2 gap-10 items-center accent-soft-bg rounded-3xl p-8 lg:p-12" style="--accent:#380997;--accent-soft:#f4f1ff">
+        <div data-reveal>
+          <div class="mono-label accent-text">Our values</div>
+          <div class="mt-5 space-y-5">
+            {values.map(v => (
+              <div class="flex gap-4">
+                <div class="display text-xl shrink-0 w-7 accent-text">·</div>
+                <div><span class="font-semibold">{v.name}.</span> <span class="text-ink-600">{v.desc}</span></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div data-reveal>
+          <div class="mono-label accent-text">Sectors we serve</div>
+          <div class="mt-5 flex flex-wrap gap-2.5">
+            {sectors.map(s => <span class="px-4 py-2 rounded-full bg-white border border-ink-900/10 text-sm font-medium">{s}</span>)}
+          </div>
+          <div class="mono-label accent-text mt-8">How we engage</div>
+          <div class="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-ink-600">
+            {engagement.map((e, i) => <span>{e.title}{i < engagement.length - 1 && <span class="text-ink-300 ml-5">·</span>}</span>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ BRANDS MARQUEE ══════════ -->
+  <section id="brands" class="py-16 lg:py-20 border-y border-ink-900/10 bg-white">
+    <div class="container-x mb-8">
+      <div class="flex items-center justify-between flex-wrap gap-4" data-reveal>
+        <div class="eyebrow mono-label text-ink-500">Vendors we deploy</div>
+        <p class="text-sm text-ink-500">Best-of-breed, never locked in.</p>
+      </div>
+    </div>
+    <div class="marquee">
+      <div class="marquee-row">
+        {[...brands, ...brands].map((b, i) => (
+          <div class="logo-tile shrink-0 grid place-items-center h-[72px] w-[168px] grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition" style={`--shine-delay:${(i % 6) * 0.7}s`}>
+            <img src={b.logo} alt={b.name} class="max-h-14 max-w-[86%] object-contain" loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ OFFICES ══════════ -->
+  <section id="offices" class="py-20 lg:py-28">
+    <div class="container-x">
+      <div class="max-w-2xl" data-reveal>
+        <div class="eyebrow mono-label text-ink-500">Where we are</div>
+        <h2 class="display d-lg mt-5 text-balance">Three offices. One responsive team.</h2>
+      </div>
+      <div class="mt-12 grid md:grid-cols-3 gap-5" data-reveal-stagger>
+        {offices.map(o => (
+          <div class="rounded-3xl border border-ink-900/10 p-7 hover:shadow-lift hover:-translate-y-1 transition bg-white">
+            <div class="flex items-center justify-between">
+              <span class="text-4xl">{o.flag}</span>
+              <span class="mono-label text-ink-400">{o.role}</span>
+            </div>
+            <h3 class="display text-2xl mt-5">{o.city}</h3>
+            <div class="text-sm text-ink-500">{o.country}</div>
+            <p class="text-sm text-ink-600 mt-3 leading-relaxed">{o.address}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CONTACT ══════════ -->
+  <section id="contact" class="py-20 lg:py-28 bg-brand-950 text-white relative overflow-hidden">
+    <div class="absolute -bottom-40 -right-32 w-[36rem] h-[36rem] rounded-full blur-3xl opacity-30 pointer-events-none" style="background:#e44a4a"></div>
+    <div class="container-x relative grid lg:grid-cols-2 gap-12 items-center">
+      <div data-reveal>
+        <div class="eyebrow mono-label text-white/45">Get in touch</div>
+        <h2 class="display d-lg mt-5 text-balance">Tell us what you’re trying to build.</h2>
+        <p class="mt-5 text-white/65 max-w-md leading-relaxed">
+          Send a brief and we’ll route it to the right engineer. Most replies go out the same business day.
+        </p>
+        <div class="mt-8 space-y-3">
+          <a href={`mailto:${company.emailSales}`} class="flex items-center gap-3 text-lg hover:text-coral-300 transition group">
+            <svg class="w-5 h-5 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg>
+            {company.emailSales}
+          </a>
+          <a href={`tel:${company.phonePrimary}`} class="flex items-center gap-3 text-lg hover:text-coral-300 transition">
+            <svg class="w-5 h-5 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+            {company.phones[0]}
+          </a>
+        </div>
+      </div>
+
+      <form id="cform" class="bg-white/[0.05] border border-white/12 rounded-3xl p-7 lg:p-9 space-y-4 backdrop-blur" data-reveal>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <input required name="name" placeholder="Your name" class="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/12 placeholder-white/40 focus:border-white/40 outline-none transition" />
+          <input required name="company" placeholder="Company" class="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/12 placeholder-white/40 focus:border-white/40 outline-none transition" />
+        </div>
+        <input required type="email" name="email" placeholder="Work email" class="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/12 placeholder-white/40 focus:border-white/40 outline-none transition" />
+        <select name="interest" class="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/12 text-white/80 focus:border-white/40 outline-none transition">
+          <option class="text-ink-900" value="">Area of interest…</option>
+          {services.map(s => <option class="text-ink-900" value={s.slug}>{s.name}</option>)}
+        </select>
+        <textarea required name="brief" rows="3" placeholder="A few sentences about your project" class="w-full px-4 py-3 rounded-xl bg-white/[0.06] border border-white/12 placeholder-white/40 focus:border-white/40 outline-none transition resize-none"></textarea>
+        <button type="submit" class="btn w-full justify-center" style="background:#fff;color:#13141d">Send brief
+          <svg class="arr w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <div id="cstatus" class="hidden text-sm rounded-xl p-3 bg-emerald-500/15 text-emerald-300 border border-emerald-400/20"></div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    function bindForm() {
+      const f = document.getElementById('cform') as HTMLFormElement | null;
+      const st = document.getElementById('cstatus');
+      f?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!st) return;
+        st.textContent = '✓ Thanks — your brief is queued. For now please also email sales@gts-hitech.com directly.';
+        st.classList.remove('hidden');
+        f.reset();
+      });
+    }
+
+    // Hero mouse-parallax: ease the glint/glow fx layer toward the cursor for depth.
+    function initHeroFX() {
+      const hero = document.getElementById('hero');
+      const fx = hero?.querySelector<HTMLElement>('.hero-fx');
+      if (!hero || !fx) return;
+      const hover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!hover || reduce || (fx as any).__fx) return;
+      (fx as any).__fx = true;
+      hero.addEventListener('mousemove', (e) => {
+        const r = hero.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width - 0.5) * 26;
+        const y = ((e.clientY - r.top) / r.height - 0.5) * 18;
+        fx.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      hero.addEventListener('mouseleave', () => { fx.style.transform = ''; });
+    }
+
+    function initPage() { bindForm(); initHeroFX(); }
+    initPage();
+    document.addEventListener('astro:after-swap', initPage);
+  </script>
+</Base>
