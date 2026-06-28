@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { services } from '../data/site';
+---
+<Base title="Page not found — GTS Hi-Tech" description="The page you’re looking for isn’t here.">
+  <section class="min-h-[78vh] grid place-items-center px-6 pt-32 pb-24">
+    <div class="text-center max-w-2xl">
+      <div class="display leading-none" style="font-size:clamp(5rem,18vw,11rem);background:linear-gradient(92deg,#380997 0%,#e44a4a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;" data-reveal>404</div>
+      <h1 class="display d-md mt-4 text-ink-900" data-reveal>This connection dropped.</h1>
+      <p class="mt-4 text-lg text-ink-600" data-reveal>The page you’re looking for has moved or never existed. Let’s route you back.</p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3" data-reveal>
+        <a href="/" class="btn btn-ink" data-magnetic>
+          Back home
+          <svg class="arr w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="/#contact" class="btn btn-outline">Talk to an engineer</a>
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-ink-900/10" data-reveal>
+        <div class="mono-label text-ink-400 mb-4">Or jump to a service</div>
+        <div class="flex flex-wrap justify-center gap-2">
+          {services.map(s => (
+            <a href={`/${s.slug}`} class="px-4 py-2 rounded-full border border-ink-900/12 text-sm font-medium hover:border-ink-900/40 transition" style={`--accent:${s.accent}`}>{s.name}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
