@@ -20,8 +20,7 @@ export const company = {
 
 export const offices = [
   { city: 'Dubai', country: 'United Arab Emirates', flag: '🇦🇪', role: 'Headquarters', address: 'Al Nasriya Building, Office 203 A, Al Qusais Industrial First' },
-  { city: 'Khartoum', country: 'Sudan', flag: '🇸🇩', role: 'Regional office', address: 'Alwaha Mall, Office 403, Alsoug Alarabi' },
-  { city: 'Juba', country: 'South Sudan', flag: '🇸🇸', role: 'Regional office', address: 'Nimra 3, building next to the basketball court' }
+  { city: 'Riyadh', country: 'Saudi Arabia', flag: '🇸🇦', role: 'Regional office', address: 'RHOA8710, 8710 Prince Mansour Ibn Abdulaziz, Al Olaya Dist., 12611' }
 ];
 
 export const values = [
