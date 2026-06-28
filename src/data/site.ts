@@ -13,7 +13,7 @@ export const company = {
     'To be the leading provider of best-in-class ICT products and services that ensure business continuity and growth.',
   email: 'info@gts-hitech.com',
   emailSales: 'sales@gts-hitech.com',
-  phones: ['+971 52 362 0668', '+971 54 343 9292', '+211 911 752 825'],
+  phones: ['+971 52 362 0668'],
   phonePrimary: '971523620668',
   whatsappMsg: 'Hi GTS — I’d like to discuss an ICT project.'
 };
